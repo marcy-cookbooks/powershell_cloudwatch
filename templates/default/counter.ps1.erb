@@ -1,0 +1,45 @@
+$AWSAccessKey  = "<%= @aws_access_key %>"
+$AWSSecretKey  = "<%= @aws_secret_key %>"
+$Region        = "<%= @region %>"
+$ProfileName   = "<%= @profile_name %>"
+
+Set-AWSCredentials -AccessKey $AWSAccessKey -SecretKey $AWSSecretKey -StoreAs $ProfileName
+
+$data = Get-counter -Counter "<%= @counter_path %>" -SampleInterval <%= @interval %> -MaxSamples <%= @sample_count %>
+
+$metric = New-Object Amazon.CloudWatch.Model.MetricDatum
+$dim = New-Object Amazon.CloudWatch.Model.Dimension
+$dim.Name  = "Instance"
+<% if @is_ec2 then %>
+$instnce_id = Invoke-RestMethod "http://169.254.169.254/latest/meta-data/instance-id"
+$dim.Value = "${Env:COMPUTERNAME}_${instnce_id}"
+<% else %>
+$dim.Value = $Env:COMPUTERNAME
+<% end %>
+$dims = New-Object 'System.Collections.Generic.List`1[Amazon.CloudWatch.Model.Dimension]'
+$dims.Add($dim)
+$metric.Dimensions = $dims
+$metric.Timestamp  = (Get-Date).ToUniversalTime()
+$metric.MetricName = <%= @metric_name %>
+$metric.StatisticValues = New-Object Amazon.CloudWatch.Model.StatisticSet
+
+$sum = 0
+$min = 0
+$max = 0
+for($i=0; $i -lt <%= @sample_count %>; $i++) {
+    $value = $data.CounterSamples[$i].CookedValue
+    $sum += $value
+    if ($value -lt $min) {
+        $min = $value
+    }
+    if ($max -lt $value) {
+        $max = $value
+    }
+}
+
+$metric.StatisticValues.Maximum = $max
+$metric.StatisticValues.Minimum = $min
+$metric.StatisticValues.SampleCount = <%= @sample_count %>
+$metric.StatisticValues.Sum = $sum
+
+Write-CWMetricData -Namespace "<%= @name_space %>" -MetricData $metric -Region $Region -ProfileName $ProfileName
