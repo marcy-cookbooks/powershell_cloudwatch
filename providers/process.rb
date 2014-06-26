@@ -7,8 +7,8 @@ action :create do
      :region => node[:powershell_cloudwatch][:region],
      :profile_name => node[:powershell_cloudwatch][:profile_name],
      :is_ec2 => node[:powershell_cloudwatch][:is_ec2],
-     :process_name => new_resource.counter_path,
-     :span_minutes => new_resource.interval,
+     :process_name => new_resource.process_name,
+     :span_minutes => new_resource.span_minutes,
      :metric_name => new_resource.metric_name,
      :name_space => new_resource.name_space
     })
