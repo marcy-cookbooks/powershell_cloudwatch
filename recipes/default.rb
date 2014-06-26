@@ -1,26 +1,26 @@
-#
-# Cookbook Name:: powershell_cloudwatch
-# Recipe:: default
-#
-# Copyright 2014, YOUR_COMPANY_NAME
-#
-# All rights reserved - Do Not Redistribute
-#
-
-remote_file "C:¥AWSToolsAndSDKForNet.msi" do
-  source "http://sdk-for-net.amazonwebservices.com/latest/AWSToolsAndSDKForNet.msi"
+powershell_cloudwatch_counter "CW_CPU" do
+  ps_file_path "C:¥cw_cpu.ps1"
+  interval 5
+  sample_count 60
+  name_space "System/Windows"
+  metric_name "CPUUtilization"
+  counter_path "¥Processor(_Total)¥% Processor Time"
 end
 
-powershell_script "import-module AWSPowerShell" do
-  cwd Chef::Config[:file_cache_path]
-  code <<-EOH
-  import-module "C:¥Program Files (x86)¥AWS Tools¥PowerShell¥AWSPowerShell¥AWSPowerShell.psd1"
-  EOH
-  action :nothing
+powershell_cloudwatch_counter "CW_Memory" do
+  ps_file_path "C:¥cw_memory.ps1"
+  interval 5
+  sample_count 60
+  name_space "System/Windows"
+  metric_name "UsedMemoryPercent"
+  counter_path "¥Memory¥% committed bytes in use"
 end
 
-windows_package "AWS Toolkit for PowerShell" do
-  action :install
-  source "C:¥AWSToolsAndSDKForNet.msi"
-  notifies :run, "powershell_script[import-module AWSPowerShell]"
+powershell_cloudwatch_counter "CW_Disk" do
+  ps_file_path "C:¥cw_memory.ps1"
+  interval 5
+  sample_count 60
+  name_space "System/Windows"
+  metric_name "UsedMemoryPercent"
+  counter_path "¥LogicalDisk(_total)¥% Free Space"
 end

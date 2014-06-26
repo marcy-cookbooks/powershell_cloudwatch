@@ -67,8 +67,6 @@ default[:powershell_cloudwatch][:is_ec2]         = true
 
 Usage
 -----
-#### powershell_cloudwatch::default
-TODO: Write usage instructions for each cookbook.
 
 ##### 1. Just include `powershell_cloudwatch` in your node's `run_list` or include your cookbook:
 

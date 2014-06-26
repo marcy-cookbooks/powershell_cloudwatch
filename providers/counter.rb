@@ -6,7 +6,7 @@ action :create do
     action :create
   end
   windows_scheduler_job new_resource.name do
-    path new_resource.ps_file_path
+    script_path new_resource.ps_file_path
     timespam_minute new_resource.interval * new_resource.sample_count / 60
     action :create
   end
