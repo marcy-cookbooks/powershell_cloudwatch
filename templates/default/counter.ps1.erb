@@ -20,7 +20,7 @@ $dims = New-Object 'System.Collections.Generic.List`1[Amazon.CloudWatch.Model.Di
 $dims.Add($dim)
 $metric.Dimensions = $dims
 $metric.Timestamp  = (Get-Date).ToUniversalTime()
-$metric.MetricName = <%= @metric_name %>
+$metric.MetricName = "<%= @metric_name %>"
 $metric.StatisticValues = New-Object Amazon.CloudWatch.Model.StatisticSet
 
 $sum = 0
