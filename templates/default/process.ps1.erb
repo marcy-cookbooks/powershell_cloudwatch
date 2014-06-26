@@ -1,0 +1,27 @@
+$AWSAccessKey  = "<%= @aws_access_key %>"
+$AWSSecretKey  = "<%= @aws_secret_key %>"
+$Region        = "<%= @region %>"
+$ProfileName   = "<%= @profile_name %>"
+
+Set-AWSCredentials -AccessKey $AWSAccessKey -SecretKey $AWSSecretKey -StoreAs $ProfileName
+
+$data = Get-Process -Name <%= @process_name %>
+
+$metric = New-Object Amazon.CloudWatch.Model.MetricDatum
+$dim = New-Object Amazon.CloudWatch.Model.Dimension
+$dim.Name  = "Instance"
+<% if @is_ec2 then %>
+$instnce_id = Invoke-RestMethod "http://169.254.169.254/latest/meta-data/instance-id"
+$dim.Value = "${Env:COMPUTERNAME}_${instnce_id}"
+<% else %>
+$dim.Value = $Env:COMPUTERNAME
+<% end %>
+$dims = New-Object 'System.Collections.Generic.List`1[Amazon.CloudWatch.Model.Dimension]'
+$dims.Add($dim)
+$metric.Dimensions = $dims
+$metric.Timestamp  = (Get-Date).ToUniversalTime()
+$metric.MetricName = "<%= @metric_name %>"
+$metric.Unit = "Count"
+$metric.Value = $data.Count
+
+Write-CWMetricData -Namespace "<%= @name_space %>" -MetricData $metric -Region $Region -ProfileName $ProfileName
