@@ -96,7 +96,7 @@ depends 'powershell_cloudwatch'
     sample_count 60
     name_space "System/Windows"
     metric_name "CPUUtilization"
-    counter_path "¥Processor(_Total)¥% Processor Time"
+    counter_path "\\Processor(_Total)\\% Processor Time"
   end
 ```
 

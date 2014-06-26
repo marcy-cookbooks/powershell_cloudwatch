@@ -14,7 +14,7 @@ end
 powershell_script "import-module AWSPowerShell" do
   cwd Chef::Config[:file_cache_path]
   code <<-EOH
-  import-module "C:\\Program Files (x86)\\AWS Tools\\PowerShell\\AWSPowerShell\\ßAWSPowerShell.psd1"
+  import-module "C:\\Program Files (x86)\\AWS Tools\\PowerShell\\AWSPowerShell\\AWSPowerShell.psd1"
   EOH
   action :nothing
 end
