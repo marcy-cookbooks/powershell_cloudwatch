@@ -3,6 +3,18 @@ action :create do
     source "counter.ps1.erb"
     owner "Administrator"
     group "Administrator"
+    variables({
+     :aws_access_key => node[:powershell_cloudwatch][:aws_access_key],
+     :aws_secret_key => node[:powershell_cloudwatch][:aws_secret_key],
+     :region => node[:powershell_cloudwatch][:region],
+     :profile_name => node[:powershell_cloudwatch][:profile_name],
+     :is_ec2 => node[:powershell_cloudwatch][:is_ec2],
+     :counter_path => new_resource.counter_path,
+     :interval => new_resource.interval,
+     :sample_count => new_resource.sample_count,
+     :metric_name => new_resource.metric_name,
+     :name_space => new_resource.name_space
+    })
     action :create
   end
   windows_scheduler_job new_resource.name do
