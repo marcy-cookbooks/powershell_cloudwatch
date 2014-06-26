@@ -91,7 +91,7 @@ depends 'powershell_cloudwatch'
 ##### 3. Create recipe that use `powershell_cloudwatch_counter` resource like this:
 ```ruby
   powershell_cloudwatch_counter "CW_CPU" do
-    ps_file_path "C:¥cw_cpu.ps1"
+    ps_file_path "C:\\cw_cpu.ps1"
     interval 5
     sample_count 60
     name_space "System/Windows"
