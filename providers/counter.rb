@@ -11,7 +11,8 @@ action :create do
      :interval => new_resource.interval,
      :sample_count => new_resource.sample_count,
      :metric_name => new_resource.metric_name,
-     :name_space => new_resource.name_space
+     :name_space => new_resource.name_space,
+     :value_calculate => new_resource.value_calculate
     })
     action :create
     cookbook 'powershell_cloudwatch'

@@ -27,7 +27,7 @@ $sum = 0
 $min = 0
 $max = 0
 for($i=0; $i -lt <%= @sample_count %>; $i++) {
-    $value = $data.CounterSamples[$i].CookedValue
+    $value = $data.CounterSamples[$i].CookedValue <%= @value_calculate %>
     $sum += $value
     if ($value -lt $min) {
         $min = $value
