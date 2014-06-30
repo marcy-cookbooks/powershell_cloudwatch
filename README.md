@@ -88,7 +88,10 @@ include_recipe "powershell_cloudwatch"
 depends 'powershell_cloudwatch'
 ```
 
-##### 3. Create recipe that use `powershell_cloudwatch_counter` resource like this:
+##### 3-1. Create recipe that use `powershell_cloudwatch_counter` resource like this:
+`powershell_cloudwatch_counter` is a custom resourece that collect internal information on the system by PerformanceCounter.
+Get a sample in every interval you specified `interval` until count of the sample that you specified `sample_count`.
+And put metric(Max,Min,Sum,SampleCount) to Amazon CloudWatch from their samples.
 ```ruby
   powershell_cloudwatch_counter "CW_CPU" do
     ps_file_path "C:\\cw_cpu.ps1"
@@ -99,6 +102,21 @@ depends 'powershell_cloudwatch'
     counter_path "\\Processor(_Total)\\% Processor Time"
   end
 ```
+
+##### 3-2. Create recipe that use `powershell_cloudwatch_process` resource like this:
+`powershell_cloudwatch_process` is a custom resourece that collect count of the process that you specified `process_name` on the system.
+And put metric(Count) to Amazon CloudWatch.
+```ruby
+  powershell_cloudwatch_process "process_powershell" do
+    ps_file_path "C:\\cw_process_powershell.ps1"
+    span_minutes 5
+    name_space "System/Windows"
+    metric_name "Process-powershell"
+    process_name "powershell"
+  end
+```
+
+
 
 Contributing
 ------------
